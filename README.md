@@ -3,9 +3,9 @@
 > The word for "constant" in Sanskrit can be translated as "स्थिर" (sthira)
 
 
-The `Constant` class is a metaclass for creating classes with constant attributes. 
-Once set, the attributes of a `Constant` class cannot be changed, and new attributes cannot be added. 
-This allows for creating classes that represent unchangeable values, such as constants, enums, and similar constructs. 
+The `Constant` class is a metaclass for creating classes with constant attributes.
+Once set, the attributes of a `Constant` class cannot be changed, and new attributes cannot be added.
+This allows for creating classes that represent unchangeable values, such as constants, enums, and similar constructs.
 The Constant class also provides a `__str__`and `__repr__` implementation for convenient representation of the class.
 
 # Installtion
@@ -89,16 +89,16 @@ class Color:
 
 @dispatch
 def get_color(color, input_):
-	# Default implementation
-	raise NotImplementedError("Unsupported color!")
+    # Default implementation
+    raise NotImplementedError("Unsupported color!")
 
 @get_color.register(Color.RED)
 def _(input_):
-	return "I'm red"
+    return "I'm red"
 
 @get_color.register(Color.GREEN)
 def _(input_):
-	return "hulk out!"
+    return "hulk out!"
 
 print(get_color(Color.GREEN, "input"))
 # hulk out!
