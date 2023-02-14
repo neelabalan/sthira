@@ -1,3 +1,6 @@
+import functools
+
+
 class InstanceCreationError(Exception):
     pass
 
@@ -25,14 +28,36 @@ class Constant(type):
     def __repr__(cls):
         return cls.__name__
 
+
 def constant(cls):
-	__name = str(cls.__name__)
-	__bases = tuple(cls.__bases__)
-	__dict = dict(cls.__dict__)
+    __name = str(cls.__name__)
+    __bases = tuple(cls.__bases__)
+    __dict = dict(cls.__dict__)
 
-	for each_slot in __dict.get("__slots__", tuple()):
-		__dict.pop(each_slot, None)
+    for each_slot in __dict.get("__slots__", tuple()):
+        __dict.pop(each_slot, None)
 
-	__dict["__metaclass__"] = Constant
-	__dict["__wrapped__"] = cls
-	return Constant(__name, __bases, __dict)
+    __dict["__metaclass__"] = Constant
+    __dict["__wrapped__"] = cls
+    return Constant(__name, __bases, __dict)
+
+
+def dispatch(func):
+    dispatch_map = {}
+
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        key = args[0]
+        if key in dispatch_map:
+            return dispatch_map[key](*args[1:], **kwargs)
+        return func(*args, **kwargs)
+
+    def register(key):
+        def decorator(func_):
+            dispatch_map[key] = func_
+            return func_
+
+        return decorator
+
+    wrapper.register = register
+    return wrapper

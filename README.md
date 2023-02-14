@@ -62,6 +62,49 @@ Animal.MAMMAL.HUMAN = "HomoSapiens"
 # AttributeError: Cannot set or change the class attributes
 ```
 
+## Dispatch
+
+> check `test_constant.py`
+
+```python
+from sthira import dispatch
+
+@constant
+class Red:
+    BRICK = "#AA4A44"
+    CADMIUM = "##D22B2B"
+
+
+@constant
+class Green:
+    LIME = "#32CD32"
+    LIGHT = "#90EE90"
+
+
+@constant
+class Color:
+    RED = Red
+    GREEN = Green
+    YELLOW = "not_there_yet"
+
+@dispatch
+def get_color(color, input_):
+	# Default implementation
+	raise NotImplementedError("Unsupported color!")
+
+@get_color.register(Color.RED)
+def _(input_):
+	return "I'm red"
+
+@get_color.register(Color.GREEN)
+def _(input_):
+	return "hulk out!"
+
+print(get_color(Color.GREEN, "input"))
+# hulk out!
+```
+
+
 ## Unit tests
 
 ```python -m unittest test_constant.py```
