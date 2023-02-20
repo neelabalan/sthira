@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sthira"
-version = "0.1.1"
+version = "0.2.0"
 description = "The `Constant` class is a metaclass for creating classes with constant attributes"
 authors = ["neelabalan <neelabalan.n@outlook.com>"]
 license = "MIT"

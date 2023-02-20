@@ -1,4 +1,9 @@
 import functools
+from typing import Any
+from typing import Callable
+from typing import Dict
+from typing import List
+from typing import Tuple
 
 
 class InstanceCreationError(Exception):
@@ -6,18 +11,42 @@ class InstanceCreationError(Exception):
 
 
 class Constant(type):
-    def __new__(cls, name, bases, arg):
+    __dunder_exclude_list = [
+        "__dict__",
+        "__weakref__",
+        "__doc__",
+        "__metaclass__",
+        "__wrapped__",
+        "__qualname__",
+        "__module__",
+    ]
+
+    def __new__(cls, name: str, bases: Tuple, arg: Dict):
         def _raise_error(x):
             raise InstanceCreationError(
                 f"Cannot create an instance of {x.__class__.__name__}"
             )
 
-        inst = super().__new__(cls, name, bases, {"_Constant__frozen": False, **arg})
+        def __select_fields(mapping: Dict, exclude_list: List = []):
+            return {key: mapping[key] for key in mapping if key not in exclude_list}
+
+        inst = super().__new__(
+            cls,
+            name,
+            bases,
+            {
+                "_Constant__frozen": False,
+                "_members": __select_fields(
+                    arg, exclude_list=Constant.__dunder_exclude_list
+                ),
+                **arg,
+            },
+        )
         inst.__init__ = _raise_error
         inst.__frozen = True
         return inst
 
-    def __setattr__(self, key, value):
+    def __setattr__(self, key: str, value: Any):
         if self.__frozen:
             raise AttributeError("Cannot set or change the class attributes")
         super().__setattr__(key, value)
@@ -29,7 +58,7 @@ class Constant(type):
         return cls.__name__
 
 
-def constant(cls):
+def constant(cls) -> Constant:
     __name = str(cls.__name__)
     __bases = tuple(cls.__bases__)
     __dict = dict(cls.__dict__)
@@ -42,7 +71,7 @@ def constant(cls):
     return Constant(__name, __bases, __dict)
 
 
-def dispatch(func):
+def dispatch(func: Callable) -> Callable:
     dispatch_map = {}
 
     @functools.wraps(func)
