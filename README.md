@@ -1,5 +1,10 @@
 # Sthira
 
+[![image](https://img.shields.io/pypi/v/sthira.svg)](https://pypi.org/project/sthira/)
+[![image](https://img.shields.io/pypi/pyversions/sthira.svg)](https://pypi.org/project/sthira/)
+[![sthira](https://snyk.io/advisor/python/sthira/badge.svg)](https://snyk.io/advisor/python/sthira)
+[![codecov](https://codecov.io/gh/neelabalan/sthira/branch/master/graph/badge.svg)](https://codecov.io/gh/neelabalan/sthira)
+
 > The word for "constant" in Sanskrit can be translated as "स्थिर" (sthira)
 
 
