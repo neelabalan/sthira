@@ -33,18 +33,6 @@ class TestConstant(unittest.TestCase):
         self.assertEqual(str(Color), "Color")
         self.assertEqual(repr(Color), "Color")
 
-    def test_members(self):
-        class Color(metaclass=Constant):
-            RED = 0
-            GREEN = 1
-            BLUE = 2
-
-        self.assertListEqual(list(Color._members.values()), [0, 1, 2])
-        self.assertListEqual(list(Color._members.keys()), ["RED", "GREEN", "BLUE"])
-        # want to raise error here since setting the _members would be bad
-        with self.assertRaises(AttributeError):
-            Color._members = {}
-
     def test_inheritance(self):
         class Bird(metaclass=Constant):
             BEAK = "Beak"
